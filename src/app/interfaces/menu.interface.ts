@@ -1,5 +1,5 @@
 export interface MenuItem {
   name: string;
-  description?: string;
-  subMenu?: MenuItem[];
+  description?: string | null;
+  subMenu?: MenuItem[] | null;
 }

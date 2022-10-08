@@ -1,0 +1,19 @@
+::ng-deep {
+  .root-ul {
+    width: 150px;
+  }
+
+  .root-ul li {
+    list-style-type: none;
+    background-color: #574f4f;
+    padding-left: 0;
+    position: relative;
+  }
+
+  .root-ul ul {
+    position: absolute;
+    right: -150px;
+    top: 0;
+    width: 150px;
+  }
+}
