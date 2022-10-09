@@ -102,6 +102,12 @@ export class MenuComponent implements OnInit, AfterViewInit {
   }
 
   onClick(event: any) {
+    if (event.target.nodeName === 'BUTTON') {
+      this.open(event.target.previousSibling.nodeValue);
+
+      return;
+    }
+
     if (event.target.nodeName !== 'SPAN') return;
 
     this.closeAllSubMenu(event.target.nextElementSibling);
@@ -156,13 +162,19 @@ export class MenuComponent implements OnInit, AfterViewInit {
         i.className = 'arrow-right';
         div.appendChild(i);
 
+        const button = document.createElement('button');
+        button.className = 'modal-button';
+        button.innerText = 'activate';
+
         if (item.subMenu?.length) {
+          span.appendChild(button);
           span.appendChild(div);
           li.appendChild(span);
           ul.appendChild(li);
 
           this.addListByJSON(item.subMenu, li, '');
         } else {
+          span.appendChild(button);
           li.appendChild(span);
           ul.appendChild(li);
         }
@@ -172,8 +184,8 @@ export class MenuComponent implements OnInit, AfterViewInit {
     }
   }
 
-  open() {
+  open(name: string) {
     const modalRef = this.modalService.open(PolygonModalComponent);
-    modalRef.componentInstance.name = 'World';
+    modalRef.componentInstance.name = name;
   }
 }

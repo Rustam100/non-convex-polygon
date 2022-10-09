@@ -12,7 +12,7 @@
   }
 
   .root-ul {
-    width: 150px;
+    width: 200px;
   }
 
   .root-ul li {
@@ -36,6 +36,33 @@
     justify-content: space-between;
   }
 
+  .root-ul {
+    .modal-button {
+      display: inline-block;
+      padding: 3px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      outline: none;
+      color: #fff;
+      background-color: #4caf50;
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 2px #999;
+    }
+
+    .modal-button:hover {
+      background-color: #3e8e41;
+    }
+
+    .modal-button:active {
+      background-color: #3e8e41;
+      box-shadow: 0 5px #666;
+      transform: translateY(4px);
+    }
+  }
+
   .root-ul div {
     background-color: transparent;
     margin-right: 5px;
@@ -56,9 +83,9 @@
   .root-ul ul {
     display: none;
     position: absolute;
-    right: -150px;
+    right: -200px;
     top: 0;
-    width: 150px;
+    width: 200px;
   }
 
   ul.sub-menu-active {
