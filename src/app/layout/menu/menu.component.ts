@@ -5,12 +5,16 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
 import { MenuItem } from 'src/app/interfaces/menu.interface';
+import { MenuService } from 'src/app/services/menu.service';
+import { PolygonModalComponent } from '../polygon-modal/polygon-modal.component';
 
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
+  providers: [NgbModalConfig, NgbModal],
 })
 export class MenuComponent implements OnInit, AfterViewInit {
   @ViewChild('menuContainer') menuContainer!: ElementRef;
@@ -64,31 +68,46 @@ export class MenuComponent implements OnInit, AfterViewInit {
     { name: 'Help', description: null, subMenu: null },
   ];
 
-  constructor(private elementRef: ElementRef) {}
+  constructor(
+    private elementRef: ElementRef,
+    config: NgbModalConfig,
+    private modalService: NgbModal,
+    private menuService: MenuService
+  ) {
+    config.backdrop = 'static';
+    config.keyboard = false;
+  }
 
   ngOnInit(): void {}
 
   ngAfterViewInit() {
-    this.addListByJSON(
-      this.menuJSON,
-      this.menuContainer.nativeElement,
-      'root-ul'
-    );
+    this.getMenu();
+  }
 
-    this.elementRef.nativeElement
-      .querySelector('.root-ul')
-      .addEventListener('click', this.onClick.bind(this));
+  getMenu() {
+    this.menuService.getMenu().subscribe((data: MenuItem[]) => {
+      console.log(data);
+      // this.menuJSON = data;
+
+      this.addListByJSON(
+        this.menuJSON,
+        this.menuContainer.nativeElement,
+        'root-ul'
+      );
+
+      this.elementRef.nativeElement
+        .querySelector('.root-ul')
+        .addEventListener('click', this.onClick.bind(this));
+    });
   }
 
   onClick(event: any) {
-    console.log(event);
-    console.log(event.target.nextElementSibling.nodeName);
     if (event.target.nodeName !== 'SPAN') return;
 
     this.closeAllSubMenu(event.target.nextElementSibling);
 
-    event.target.classList.add('sub-menu-active-span');
-    event.target.nextElementSibling.classList.toggle('sub-menu-active');
+    event.target?.classList?.toggle('sub-menu-active-span');
+    event.target.nextElementSibling?.classList?.toggle('sub-menu-active');
   }
 
   closeAllSubMenu(current: any = null) {
@@ -132,15 +151,29 @@ export class MenuComponent implements OnInit, AfterViewInit {
         const span = document.createElement('span');
         span.innerText = item.name;
 
-        li.appendChild(span);
-        ul.appendChild(li);
+        const div = document.createElement('div');
+        const i = document.createElement('i');
+        i.className = 'arrow-right';
+        div.appendChild(i);
 
         if (item.subMenu?.length) {
+          span.appendChild(div);
+          li.appendChild(span);
+          ul.appendChild(li);
+
           this.addListByJSON(item.subMenu, li, '');
+        } else {
+          li.appendChild(span);
+          ul.appendChild(li);
         }
       });
 
       menuContainer.appendChild(ul);
     }
+  }
+
+  open() {
+    const modalRef = this.modalService.open(PolygonModalComponent);
+    modalRef.componentInstance.name = 'World';
   }
 }

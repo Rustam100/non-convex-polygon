@@ -16,6 +16,8 @@
   }
 
   .root-ul li {
+    display: flex;
+    justify-content: space-between;
     list-style-type: none;
     background-color: #574f4f;
     padding-left: 0;
@@ -28,6 +30,27 @@
     display: block;
     padding: 5px 10px;
     cursor: pointer;
+
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .root-ul div {
+    background-color: transparent;
+    margin-right: 5px;
+  }
+
+  .root-ul div i {
+    &.arrow-right {
+      transform: rotate(-45deg);
+      -webkit-transform: rotate(-45deg);
+      border: solid #eee;
+      border-width: 0 3px 3px 0;
+      display: inline-block;
+      padding: 3px;
+      cursor: pointer;
+    }
   }
 
   .root-ul ul {
