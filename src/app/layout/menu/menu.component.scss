@@ -1,4 +1,16 @@
 ::ng-deep {
+  * {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+  }
+  *:before,
+  *:after {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+  }
+
   .root-ul {
     width: 150px;
   }
@@ -10,10 +22,27 @@
     position: relative;
   }
 
+  .root-ul span {
+    text-decoration: none;
+    color: #eee;
+    display: block;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+
   .root-ul ul {
+    display: none;
     position: absolute;
     right: -150px;
     top: 0;
     width: 150px;
+  }
+
+  ul.sub-menu-active {
+    display: block;
+  }
+
+  span.sub-menu-active-span {
+    background: #f03861;
   }
 }

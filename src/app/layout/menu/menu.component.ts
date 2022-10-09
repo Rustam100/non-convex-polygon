@@ -29,7 +29,23 @@ export class MenuComponent implements OnInit, AfterViewInit {
       description: null,
       subMenu: [
         { name: 'Cut', description: null, subMenu: null },
-        { name: 'Copy', description: null, subMenu: null },
+        {
+          name: 'Copy',
+          description: null,
+          subMenu: [
+            { name: 'Copy 1', description: null, subMenu: null },
+            {
+              name: 'Copy 2',
+              description: null,
+              subMenu: [
+                { name: 'Copy 21', description: null, subMenu: null },
+                { name: 'Copy 22', description: null, subMenu: null },
+                { name: 'Copy 23', description: null, subMenu: null },
+              ],
+            },
+            { name: 'Copy 3', description: null, subMenu: null },
+          ],
+        },
         { name: 'Paste', description: null, subMenu: null },
         { name: 'Paste', description: null, subMenu: null },
         { name: 'Find', description: null, subMenu: null },
@@ -48,7 +64,7 @@ export class MenuComponent implements OnInit, AfterViewInit {
     { name: 'Help', description: null, subMenu: null },
   ];
 
-  constructor() {}
+  constructor(private elementRef: ElementRef) {}
 
   ngOnInit(): void {}
 
@@ -58,9 +74,55 @@ export class MenuComponent implements OnInit, AfterViewInit {
       this.menuContainer.nativeElement,
       'root-ul'
     );
+
+    this.elementRef.nativeElement
+      .querySelector('.root-ul')
+      .addEventListener('click', this.onClick.bind(this));
   }
 
-  addListByJSON(menuJSON: any, menuContainer: any, className: string) {
+  onClick(event: any) {
+    console.log(event);
+    console.log(event.target.nextElementSibling.nodeName);
+    if (event.target.nodeName !== 'SPAN') return;
+
+    this.closeAllSubMenu(event.target.nextElementSibling);
+
+    event.target.classList.add('sub-menu-active-span');
+    event.target.nextElementSibling.classList.toggle('sub-menu-active');
+  }
+
+  closeAllSubMenu(current: any = null) {
+    let parents: Element[] = [];
+    if (current) {
+      let currentParent = current.parentNode;
+
+      while (currentParent) {
+        if (currentParent.classList.contains('root-ul')) break;
+
+        if (currentParent.nodeName === 'UL') parents.push(currentParent);
+
+        currentParent = currentParent.parentNode;
+      }
+    }
+
+    const subMenu = document.querySelectorAll('.root-ul ul');
+
+    Array.from(subMenu).forEach((item: Element) => {
+      if (item !== current && !parents.includes(item)) {
+        item.classList.remove('sub-menu-active');
+
+        if (item.previousElementSibling?.nodeName === 'SPAN') {
+          item.previousElementSibling.classList.remove('sub-menu-active-span');
+        }
+      }
+    });
+  }
+
+  addListByJSON(
+    menuJSON: MenuItem[],
+    menuContainer: HTMLElement,
+    className: string
+  ) {
     if (menuJSON.length) {
       const ul = document.createElement('ul');
       ul.className = className;
